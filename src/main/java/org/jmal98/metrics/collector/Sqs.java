@@ -19,7 +19,7 @@ import io.prometheus.client.Collector;
 import io.prometheus.client.GaugeMetricFamily;
 
 public class Sqs extends Collector {
-	
+
 	private final Logger logger = LogManager.getLogger(getClass());
 
 	private AmazonSQSClient sqs = null;
@@ -31,7 +31,7 @@ public class Sqs extends Collector {
 		List<MetricFamilySamples> mfs = new ArrayList<MetricFamilySamples>();
 
 		try {
-			
+
 			if (sqs == null) {
 				sqs = new AmazonSQSClient(new DefaultAWSCredentialsProviderChain());
 			}
@@ -41,8 +41,8 @@ public class Sqs extends Collector {
 				String[] tokens = qUrl.split("\\/");
 				String queueName = tokens[tokens.length - 1];
 
-				GaugeMetricFamily labeledGauge = new GaugeMetricFamily(String.format("aws_sqs_queue_%s", queueName),
-						"help", 
+				GaugeMetricFamily labeledGauge = new GaugeMetricFamily(String.format("sqs_queue_%s", queueName),
+						"help",
 						Arrays.asList("attribute"));
 
 				GetQueueAttributesResult attr = sqs.getQueueAttributes(qUrl, attributeNames);
