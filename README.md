@@ -46,7 +46,6 @@ docker run -d -p 9384:9384 -e AWS_ACCESS_KEY_ID=<access key> -e AWS_SECRET_ACCES
 | sqs_queue_<queue name> | ApproximateNumberOfMessages,ApproximateNumberOfMessagesDelayed,ApproximateNumberOfMessagesNotVisible |
 
 
-Label Meanings
 
 * ApproximateNumberOfMessages - Approximate number of visible messages in a queue. For more information, see Resources Required to Process Messages in the Amazon SQS Developer Guide.
 * ApproximateNumberOfMessagesDelayed - Approximate number of messages that are waiting to be added to the queue.
