@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.jmal.prometheus</groupId>
+	<artifactId>sqs-exporter</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.8</java.version>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
+	</properties>
+
+	<licenses>
+		<license>
+			<name>The Apache Software License, Version 2.0</name>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+			<distribution>repo</distribution>
+		</license>
+	</licenses>
+
+	<developers>
+		<developer>
+			<id>jmal</id>
+			<name>Jamal Bullock</name>
+		</developer>
+	</developers>
+
+
+	<build>
+		<pluginManagement>
+			<plugins>
+
+				<plugin>
+					<artifactId>maven-dependency-plugin</artifactId>
+					<version>3.0.1</version>
+				</plugin>
+
+				<plugin>
+					<artifactId>maven-enforcer-plugin</artifactId>
+					<version>3.0.0-M1</version>
+				</plugin>
+
+				<plugin>
+					<artifactId>maven-clean-plugin</artifactId>
+					<version>3.0.0</version>
+				</plugin>
+
+				<plugin>
+					<artifactId>maven-resources-plugin</artifactId>
+					<version>3.0.2</version>
+				</plugin>
+
+				<plugin>
+					<artifactId>maven-compiler-plugin</artifactId>
+					<version>3.6.2</version>
+					<configuration>
+						<source>${maven.compiler.source}</source>
+						<target>${maven.compiler.target}</target>
+						<debug>true</debug>
+						<debuglevel>lines,vars,source</debuglevel>
+					</configuration>
+				</plugin>
+
+				<plugin>
+					<artifactId>maven-jar-plugin</artifactId>
+					<version>3.0.2</version>
+				</plugin>
+
+				<plugin>
+					<artifactId>maven-war-plugin</artifactId>
+					<version>3.1.0</version>
+				</plugin>
+
+				<plugin>
+					<artifactId>maven-assembly-plugin</artifactId>
+					<version>3.1.0</version>
+				</plugin>
+
+				<plugin>
+					<artifactId>maven-surefire-plugin</artifactId>
+					<version>2.20</version>
+				</plugin>
+
+				<plugin>
+					<artifactId>maven-failsafe-plugin</artifactId>
+					<version>3.0.0</version>
+				</plugin>
+
+				<plugin>
+					<artifactId>maven-install-plugin</artifactId>
+					<version>2.5.2</version>
+				</plugin>
+
+				<plugin>
+					<artifactId>maven-deploy-plugin</artifactId>
+					<version>2.8.2</version>
+				</plugin>
+
+			</plugins>
+		</pluginManagement>
+
+
+
+		<plugins>
+			<plugin>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>enforce-java-maven-versions</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<fail>true</fail>
+							<rules>
+								<requireMavenVersion>
+									<version>[3.0,3.5]</version>
+								</requireMavenVersion>
+								<requireJavaVersion>
+									<version>[1.8,)</version>
+								</requireJavaVersion>
+							</rules>
+						</configuration>
+					</execution>
+
+					<execution>
+						<id>enforce-dependency-convergence</id>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+						<configuration>
+							<fail>true</fail>
+							<rules>
+								<dependencyConvergence />
+							</rules>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-shade-plugin</artifactId>
+				<version>2.4.3</version>
+				<executions>
+					<execution>
+						<phase>package</phase>
+						<goals>
+							<goal>shade</goal>
+						</goals>
+						<configuration>
+							<transformers>
+								<transformer
+									implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+									<mainClass>org.jmal98.sqs.exporter.Application</mainClass>
+								</transformer>
+							</transformers>
+							<finalName>exporter</finalName>
+							<filters>
+								<filter>
+									<artifact>*:*</artifact>
+									<excludes>
+										<exclude>META-INF/*.SF</exclude>
+										<exclude>META-INF/*.DSA</exclude>
+										<exclude>META-INF/*.RSA</exclude>
+									</excludes>
+								</filter>
+							</filters>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+	
+	
+	<profiles>
+                <profile>
+                        <id>docker-image</id>
+                        <build>
+                                <plugins>
+                                        <plugin>
+                                                <groupId>org.codehaus.mojo</groupId>
+                                                <artifactId>exec-maven-plugin</artifactId>
+                                                <version>1.4.0</version>
+                                                <executions>
+                                                        <execution>
+                                                                <id>build-image</id>
+                                                                <phase>package</phase>
+                                                                <goals>
+                                                                        <goal>exec</goal>
+                                                                </goals>
+                                                                <configuration>
+                                                                        <executable>sudo</executable>
+                                                                        <arguments>
+                                                                                <argument>docker</argument>
+                                                                                <argument>build</argument>
+                                                                                <argument>--rm=true</argument>
+                                                                                <argument>--force-rm=true</argument>
+                                                                                <argument>--tag</argument>
+                                                                                <argument>sqs-exporter:latest</argument>
+                                                                                <argument>.</argument>
+                                                                        </arguments>
+                                                                </configuration>
+                                                        </execution>
+                                                </executions>
+                                        </plugin>
+                                </plugins>
+                        </build>
+                </profile>
+	</profiles>
+
+
+
+	<dependencies>
+
+		<dependency>
+			<groupId>org.eclipse.jetty</groupId>
+			<artifactId>jetty-servlet</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk-core</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.amazonaws</groupId>
+			<artifactId>aws-java-sdk-sqs</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>io.prometheus</groupId>
+			<artifactId>simpleclient_servlet</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>io.prometheus</groupId>
+			<artifactId>simpleclient_hotspot</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-api</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-core</artifactId>
+		</dependency>
+
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.11</version>
+			<scope>test</scope>
+		</dependency>
+
+	</dependencies>
+
+
+	<dependencyManagement>
+		<dependencies>
+
+			<dependency>
+				<groupId>org.eclipse.jetty</groupId>
+				<artifactId>jetty-servlet</artifactId>
+				<version>9.3.13.v20161014</version>
+			</dependency>
+
+			<dependency>
+				<groupId>io.prometheus</groupId>
+				<artifactId>simpleclient_servlet</artifactId>
+				<version>0.0.21</version>
+			</dependency>
+
+			<dependency>
+				<groupId>io.prometheus</groupId>
+				<artifactId>simpleclient_hotspot</artifactId>
+				<version>0.0.21</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.amazonaws</groupId>
+				<artifactId>aws-java-sdk-core</artifactId>
+				<version>1.10.27</version>
+			</dependency>
+
+			<dependency>
+				<groupId>com.amazonaws</groupId>
+				<artifactId>aws-java-sdk-sqs</artifactId>
+				<version>1.10.27</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-api</artifactId>
+				<version>2.8.2</version>
+			</dependency>
+
+			<dependency>
+				<groupId>org.apache.logging.log4j</groupId>
+				<artifactId>log4j-core</artifactId>
+				<version>2.8.2</version>
+			</dependency>
+
+
+		</dependencies>
+
+	</dependencyManagement>
+
+</project>
