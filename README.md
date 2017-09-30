@@ -43,7 +43,7 @@ docker run -d -p 9384:9384 -e AWS_ACCESS_KEY_ID=<access key> -e AWS_SECRET_ACCES
 
 | Metric  | Labels |
 | ------  | ------ |
-| sqs_queue_QUEUE_NAME | ApproximateNumberOfMessages,ApproximateNumberOfMessagesDelayed,ApproximateNumberOfMessagesNotVisible |
+| sqs_ATTRIBUTE_NAME | Queue Name |
 
 
 
