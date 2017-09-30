@@ -37,6 +37,22 @@ If you would like to run the exporter with supplied environment configuration, t
 docker run -d -p 9384:9384 -e AWS_ACCESS_KEY_ID=<access key> -e AWS_SECRET_ACCESS_KEY=<secret key> sqs-exporter
 ```
 
+## Docker
+
+You can deploy this exporter using the [jmal98/sqs-exporter](https://hub.docker.com/r/jmal98/sqs-exporter/) Docker image.
+
+For example if using an IAM profile:
+
+```bash
+docker run -d -p 9384:9384 jmal98/sqs-exporter
+```
+
+For example if supplying environment configuration:
+
+```bash
+docker run -d -p 9384:9384 -e AWS_ACCESS_KEY_ID=<access key> -e AWS_SECRET_ACCESS_KEY=<secret key>  jmal98/sqs-exporter
+```
+
 
 
 ### Exported Metrics
