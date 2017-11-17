@@ -119,7 +119,7 @@
 							<fail>true</fail>
 							<rules>
 								<requireMavenVersion>
-									<version>[3.0,3.5]</version>
+									<version>[3.0,)</version>
 								</requireMavenVersion>
 								<requireJavaVersion>
 									<version>[1.8,)</version>
@@ -128,7 +128,7 @@
 						</configuration>
 					</execution>
 
-					<execution>
+					<!--<execution>
 						<id>enforce-dependency-convergence</id>
 						<goals>
 							<goal>enforce</goal>
@@ -139,10 +139,10 @@
 								<dependencyConvergence />
 							</rules>
 						</configuration>
-					</execution>
+					</execution> -->
 				</executions>
 			</plugin>
-			
+
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-shade-plugin</artifactId>
@@ -177,8 +177,8 @@
 			</plugin>
 		</plugins>
 	</build>
-	
-	
+
+
 	<profiles>
                 <profile>
                         <id>docker-image</id>
@@ -289,13 +289,13 @@
 			<dependency>
 				<groupId>com.amazonaws</groupId>
 				<artifactId>aws-java-sdk-core</artifactId>
-				<version>1.10.27</version>
+				<version>1.11.231</version>
 			</dependency>
 
 			<dependency>
 				<groupId>com.amazonaws</groupId>
 				<artifactId>aws-java-sdk-sqs</artifactId>
-				<version>1.10.27</version>
+				<version>1.11.231</version>
 			</dependency>
 
 			<dependency>
