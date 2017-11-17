@@ -11,7 +11,8 @@ import org.apache.logging.log4j.Logger;
 
 import com.amazonaws.AmazonClientException;
 import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
-import com.amazonaws.services.sqs.AmazonSQSClient;
+import com.amazonaws.services.sqs.AmazonSQS;
+import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
 import com.amazonaws.services.sqs.model.GetQueueAttributesResult;
 import com.amazonaws.services.sqs.model.ListQueuesResult;
 
@@ -22,10 +23,9 @@ public class Sqs extends Collector {
 
 	private final Logger logger = LogManager.getLogger(getClass());
 
-	private AmazonSQSClient sqs = null;
-
-	private List<String> attributeNames = new ArrayList<String>();
+	private AmazonSQS sqs = null;
 	
+	private List<String> attributeNames = new ArrayList<String>();
 	private Map<String,String> attributeDescriptions = new HashMap<String,String>();
 
 	@Override
@@ -35,7 +35,7 @@ public class Sqs extends Collector {
 		try {
 
 			if (sqs == null) {
-				sqs = new AmazonSQSClient(new DefaultAWSCredentialsProviderChain());
+				sqs = AmazonSQSClientBuilder.defaultClient();
 			}
 
 			ListQueuesResult queues = sqs.listQueues();
@@ -51,10 +51,10 @@ public class Sqs extends Collector {
 							String.format("sqs_%s", key.toLowerCase().trim()),
 							attributeDescriptions.get(key),
 							Arrays.asList("queue"));
-					
+
 					labeledGauge.addMetric(Arrays.asList(queueName),
 							Double.valueOf(qAttributes.get(key)));
-					
+
 					mfs.add(labeledGauge);
 				}
 			}
@@ -73,10 +73,10 @@ public class Sqs extends Collector {
 		super();
 		attributeNames.add("ApproximateNumberOfMessages");
 		attributeDescriptions.put("ApproximateNumberOfMessages", "The approximate number of visible messages in a queue.");
-		
+
 		attributeNames.add("ApproximateNumberOfMessagesDelayed");
 		attributeDescriptions.put("ApproximateNumberOfMessagesDelayed", "The approximate number of messages that are waiting to be added to the queue.");
-		
+
 		attributeNames.add("ApproximateNumberOfMessagesNotVisible");
 		attributeDescriptions.put("ApproximateNumberOfMessagesNotVisible", "The approximate number of messages that have not timed-out and aren't deleted.");
 	}
