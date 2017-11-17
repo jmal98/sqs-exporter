@@ -14,6 +14,7 @@ AWS credentials can be provided via the following:
 * Credentials delivered through the Amazon EC2 container service if AWS_CONTAINER_CREDENTIALS_RELATIVE_URI" environment variable is set and security manager has permission to access the variable,
 * Instance profile credentials delivered through the Amazon EC2 metadata service if running within AWS
 
+The AWS region can be specified using the AWS_REGION environment variable
 
 ### Docker Image
 
@@ -34,7 +35,7 @@ docker run -d -p 9384:9384 sqs-exporter
 If you would like to run the exporter with supplied environment configuration, the following will work both inside and outside of AWS.  This is useful if you desire to run the exporter externally.
 
 ```bash
-docker run -d -p 9384:9384 -e AWS_ACCESS_KEY_ID=<access key> -e AWS_SECRET_ACCESS_KEY=<secret key> sqs-exporter
+docker run -d -p 9384:9384 -e AWS_ACCESS_KEY_ID=<access key> -e AWS_SECRET_ACCESS_KEY=<secret key> sqs-exporter -e AWS_REGION=eu-west-1
 ```
 
 ## Docker
