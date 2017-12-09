@@ -2,12 +2,27 @@ FROM alpine:3.6
 
 RUN apk add --no-cache openjdk8-jre
 
+ENV MAVEN_VERSION=3.5.2 \
+    MAVEN_SHA1=190dcebb8a080f983af4420cac4f3ece7a47dd64
+
 RUN addgroup -g 9232 -S exporter ; \
         adduser -D -S -u 9232 -G exporter exporter
 
-USER exporter
+ADD src /tmp/src
 
-ADD target/exporter.jar exporter.jar
+ADD pom.xml /tmp/pom.xml
+
+RUN apk --update add --no-cache --virtual build-dependencies openjdk8 curl \
+  && curl -SL -o /tmp/apache-maven-$MAVEN_VERSION-bin.tar.gz "https://archive.apache.org/dist/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz" \
+  && echo -n "$MAVEN_SHA1  /tmp/apache-maven-$MAVEN_VERSION-bin.tar.gz" | sha1sum -c \
+  && tar -xzvf /tmp/apache-maven-$MAVEN_VERSION-bin.tar.gz -C /tmp \
+  && /tmp/apache-maven-$MAVEN_VERSION/bin/mvn -f /tmp/pom.xml clean install -B \
+  && mv /tmp/target/exporter.jar /. \
+  && chown exporter:exporter /exporter.jar \
+  && rm -rf /tmp/* /root/.m2 \
+  && apk del build-dependencies
+
+USER exporter
 
 EXPOSE 9384
 
