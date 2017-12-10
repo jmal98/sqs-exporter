@@ -41,6 +41,7 @@ public class Application {
 
 		ServletHandler handler = new ServletHandler();
 		server.setHandler(handler);
+		handler.addServletWithMapping(IndexServlet.class, "/");
 		handler.addServletWithMapping(MetricsServlet.class, "/metrics");
 		handler.addFilterWithMapping(DisableMethodsFilter.class, "/*", EnumSet.of(DispatcherType.REQUEST));
 
