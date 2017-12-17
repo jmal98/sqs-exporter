@@ -17,10 +17,14 @@ public class IndexServlet extends HttpServlet {
 		try (
 				Writer writer = resp.getWriter();
 			){
-			writer.write("<html>SQS Exporter</html>");
-			writer.flush();
+			
+			if (req.getServletPath().equals("/")) {
+				writer.write("<html>SQS Exporter</html>");
+				writer.flush();
+			} else {
+				resp.setStatus(HttpServletResponse.SC_NOT_FOUND);
+			}
 		} finally {}
 	}
 
 }
-

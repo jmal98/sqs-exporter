@@ -6,6 +6,7 @@ import javax.servlet.DispatcherType;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.eclipse.jetty.http.HttpGenerator;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.servlet.ServletHandler;
 import org.jmal98.metrics.collector.Sqs;
@@ -49,6 +50,8 @@ public class Application {
 
 		logger.info("Exporter has started.");
 		startup.inc();
+		
+		HttpGenerator.setJettyVersion("");
 
 		server.join();
 
