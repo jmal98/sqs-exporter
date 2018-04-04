@@ -1,4 +1,4 @@
-FROM alpine:3.6
+FROM alpine:3.7
 
 RUN apk add --no-cache openjdk8-jre
 
@@ -26,4 +26,4 @@ USER exporter
 
 EXPOSE 9384
 
-CMD ["java", "-Xmx512m", "-jar", "exporter.jar"]        
+CMD ["java", "-Xmx512m", "-jar", "exporter.jar"]

@@ -10,8 +10,8 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.amazonaws.AmazonClientException;
-import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
-import com.amazonaws.services.sqs.AmazonSQSClient;
+import com.amazonaws.services.sqs.AmazonSQS;
+import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
 import com.amazonaws.services.sqs.model.GetQueueAttributesResult;
 import com.amazonaws.services.sqs.model.ListQueuesResult;
 
@@ -22,7 +22,7 @@ public class Sqs extends Collector {
 
 	private final Logger logger = LogManager.getLogger(getClass());
 
-	private AmazonSQSClient sqs = null;
+	private AmazonSQS sqs = null;
 
 	private List<String> attributeNames = new ArrayList<String>();
 	
@@ -35,7 +35,7 @@ public class Sqs extends Collector {
 		try {
 
 			if (sqs == null) {
-				sqs = new AmazonSQSClient(new DefaultAWSCredentialsProviderChain());
+				sqs = AmazonSQSClientBuilder.defaultClient();
 			}
 
 			ListQueuesResult queues = sqs.listQueues();
