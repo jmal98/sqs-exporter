@@ -10,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.amazonaws.AmazonClientException;
+import com.amazonaws.regions.DefaultAwsRegionProviderChain;
 import com.amazonaws.services.sqs.AmazonSQS;
 import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
 import com.amazonaws.services.sqs.model.GetQueueAttributesResult;
@@ -35,7 +36,12 @@ public class Sqs extends Collector {
 		try {
 
 			if (sqs == null) {
-				sqs = AmazonSQSClientBuilder.defaultClient();
+				String region = new DefaultAwsRegionProviderChain().getRegion();
+				sqs = AmazonSQSClientBuilder
+								.standard()
+								.withRegion(region)
+							.build();
+				logger.info("AmazonSQS client is connected to region: ({})", region);
 			}
 
 			ListQueuesResult queues = sqs.listQueues();
