@@ -1,0 +1,32 @@
+#
+#  Useful for testing the exporter locally
+#
+#
+version: '3'
+services:
+  prometheus:
+    image: quay.io/prometheus/prometheus:v2.2.1
+    ports:
+      - 9090:9090
+    volumes:
+      - "./src/test/resources/prometheus.yml:/etc/prometheus/prometheus.yml:Z"
+      
+  grafana:
+    image: grafana/grafana:5.0.4
+    ports:
+      - 3000:3000
+    volumes:
+      - "./src/test/resources/datasource.yaml:/etc/grafana/provisioning/datasources/datasource.yaml:Z"
+    environment:
+      GF_SERVER_ENABLE_GZIP: "true"
+      GF_AUTH_ANONYMOUS_ENABLED: "true"
+      GF_AUTH_ANONYMOUS_ORG_ROLE: Admin
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      
+  sqs-exporter:
+    image: jmal98/sqs-exporter:0.0.4
+    build: .
+    ports:
+      - 9384:9384
+    volumes:
+      - "~/.aws:/home/exporter/.aws:Z"
