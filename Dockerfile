@@ -2,8 +2,8 @@ FROM alpine:3.7
 
 RUN apk add --no-cache openjdk8-jre
 
-ENV MAVEN_VERSION=3.5.2 \
-    MAVEN_SHA1=190dcebb8a080f983af4420cac4f3ece7a47dd64
+ENV MAVEN_VERSION=3.5.4 \
+    MAVEN_SHA1=22cac91b3557586bb1eba326f2f7727543ff15e3
 
 RUN addgroup -g 9232 -S exporter ; \
         adduser -D -S -u 9232 -G exporter exporter
