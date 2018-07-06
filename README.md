@@ -35,11 +35,11 @@ You can deploy this exporter using the [jmal98/sqs-exporter](https://hub.docker.
 If you run in AWS, the following will assume it's running with an IAM profile which will allow read access to SQS information.
 
 ```bash
-docker run -d -p 9384:9384 jmal98/sqs-exporter:0.0.4
+docker run -d -p 9384:9384 jmal98/sqs-exporter:0.0.5
 ```
 
 If you would like to run the exporter with supplied environment configuration, the following will work both inside and outside of AWS.  This is useful if you desire to run the exporter externally.
 
 ```bash
-docker run -d -p 9384:9384 -e AWS_ACCESS_KEY_ID=<access key> -e AWS_SECRET_ACCESS_KEY=<secret key> -e AWS_REGION=<region>  jmal98/sqs-exporter:0.0.4
+docker run -d -p 9384:9384 -e AWS_ACCESS_KEY_ID=<access key> -e AWS_SECRET_ACCESS_KEY=<secret key> -e AWS_REGION=<region>  jmal98/sqs-exporter:0.0.5
 ```
