@@ -44,8 +44,24 @@ public class Sqs extends Collector {
 				logger.info("AmazonSQS client is connected to region: ({})", region);
 			}
 
-			ListQueuesResult queues = sqs.listQueues();
-			for (String qUrl : queues.getQueueUrls()) {
+			List<String> queueUrls;
+
+			// check for manually-specified queue names
+			String queueNames = System.getenv("SQS_QUEUE_NAMES");
+			if (queueNames != null) {
+			    // find the URLs for the named queues
+			    String[] names = queueNames.split(",");
+			    queueUrls = new ArrayList<String>();
+			    for(String name : names) {
+				queueUrls.add(sqs.getQueueUrl(name).getQueueUrl());
+			    }
+			} else {
+			    // get URLs for all queues visible to this account
+			    ListQueuesResult queues = sqs.listQueues();
+			    queueUrls = queues.getQueueUrls();
+			}
+
+			for (String qUrl : queueUrls) {
 				String[] tokens = qUrl.split("\\/");
 				String queueName = tokens[tokens.length - 1];
 
