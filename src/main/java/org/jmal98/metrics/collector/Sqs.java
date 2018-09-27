@@ -97,7 +97,7 @@ public class Sqs extends Collector {
 		attributeDescriptions.put("ApproximateNumberOfMessages", "The approximate number of visible messages in a queue.");
 		
 		attributeNames.add("ApproximateNumberOfMessagesDelayed");
-		attributeDescriptions.put("ApproximateNumberOfMessagesDelayed", "The approximate number of messages that are waiting to be added to the queue.");
+		attributeDescriptions.put("ApproximateNumberOfMessagesDelayed", "TESTTESTTESTTESTTEST");
 		
 		attributeNames.add("ApproximateNumberOfMessagesNotVisible");
 		attributeDescriptions.put("ApproximateNumberOfMessagesNotVisible", "The approximate number of messages that have not timed-out and aren't deleted.");
