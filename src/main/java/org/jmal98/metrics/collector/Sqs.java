@@ -46,7 +46,7 @@ public class Sqs extends Collector {
 
 			List<String> queueUrls;
 
-			// check for a manually-specified queue name filters
+			// check for manually-specified queue name filters
 			String queueNames = System.getenv("SQS_QUEUE_NAMES");
 			String queueNamePrefix = System.getenv("SQS_QUEUE_NAME_PREFIX");
 			if (queueNames != null) {
