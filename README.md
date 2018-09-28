@@ -27,7 +27,7 @@ AWS credentials can be provided via the following:
 * Instance profile credentials delivered through the Amazon EC2 metadata service if running within AWS
 * IAM role applied to either an Amazon Elastic Container Service (ECS) service or task
 
-By default, the exporter will watch all SQS queues visible to the AWS account. To watch a specific set of queues, supply a comma-separated list of queue names in the environment variable SQS_QUEUE_NAMES.
+By default, the exporter will watch all SQS queues visible to the AWS account. To watch a specific set of queues, supply a comma-separated list of queue names in the environment variable SQS_QUEUE_NAMES or a single queue prefix in SQS_QUEUE_NAME_PREFIX. (SQS_QUEUE_NAMES takes precedence over SQS_QUEUE_NAME_PREFIX)
 
 ## Docker
 
@@ -37,6 +37,12 @@ If you run in AWS, the following will assume it's running with an IAM profile wh
 
 ```bash
 docker run -d -p 9384:9384 jmal98/sqs-exporter:0.0.5
+```
+
+Use the following to pass the queue filtering environment variables to the docker container.
+
+```bash
+docker run -d -e SQS_QUEUE_NAME_PREFIX='example_queue_prefix' -p 9384:9384 jmal98/sqs-exporter:0.0.5
 ```
 
 If you would like to run the exporter with supplied environment configuration, the following will work both inside and outside of AWS.  This is useful if you desire to run the exporter externally.
