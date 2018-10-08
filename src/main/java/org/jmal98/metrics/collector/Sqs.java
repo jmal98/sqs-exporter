@@ -58,7 +58,7 @@ public class Sqs extends Collector {
 			    }
 			} else {
 			    // get URLs for all queues visible to this account (with prefix if specified)
-			    ListQueuesResult queues = sqs.listQueues(queueNamePrefix);
+			    ListQueuesResult queues = sqs.listQueues(queueNamePrefix); //If null is passed in the whole unfiltered list is returned
 			    queueUrls = queues.getQueueUrls();
 			}
 
