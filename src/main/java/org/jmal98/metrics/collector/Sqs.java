@@ -46,8 +46,9 @@ public class Sqs extends Collector {
 
 			List<String> queueUrls;
 
-			// check for manually-specified queue names
+			// check for manually-specified queue name filters
 			String queueNames = System.getenv("SQS_QUEUE_NAMES");
+			String queueNamePrefix = System.getenv("SQS_QUEUE_NAME_PREFIX");
 			if (queueNames != null) {
 			    // find the URLs for the named queues
 			    String[] names = queueNames.split(",");
@@ -56,8 +57,8 @@ public class Sqs extends Collector {
 				queueUrls.add(sqs.getQueueUrl(name).getQueueUrl());
 			    }
 			} else {
-			    // get URLs for all queues visible to this account
-			    ListQueuesResult queues = sqs.listQueues();
+			    // get URLs for all queues visible to this account (with prefix if specified)
+			    ListQueuesResult queues = sqs.listQueues(queueNamePrefix); //If null is passed in the whole unfiltered list is returned
 			    queueUrls = queues.getQueueUrls();
 			}
 
