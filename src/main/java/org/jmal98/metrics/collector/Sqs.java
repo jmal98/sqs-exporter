@@ -47,9 +47,16 @@ public class Sqs extends Collector {
 			List<String> queueUrls;
 
 			// check for manually-specified queue name filters
+			String queueUrlsFromEnv = System.getenv("SQS_QUEUE_URLS");
 			String queueNames = System.getenv("SQS_QUEUE_NAMES");
 			String queueNamePrefix = System.getenv("SQS_QUEUE_NAME_PREFIX");
-			if (queueNames != null) {
+			if (queueUrlsFromEnv != null) {
+				String[] urls = queueUrlsFromEnv.split(",");
+				queueUrls = new ArrayList<String>();
+				for(String url : urls) {
+					queueUrls.add(url);
+				}
+			} else if (queueNames != null) {
 			    // find the URLs for the named queues
 			    String[] names = queueNames.split(",");
 			    queueUrls = new ArrayList<String>();

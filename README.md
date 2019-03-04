@@ -27,7 +27,12 @@ AWS credentials can be provided via the following:
 * Instance profile credentials delivered through the Amazon EC2 metadata service if running within AWS
 * IAM role applied to either an Amazon Elastic Container Service (ECS) service or task
 
-By default, the exporter will watch all SQS queues visible to the AWS account. To watch a specific set of queues, supply a comma-separated list of queue names in the environment variable SQS_QUEUE_NAMES or a single queue prefix in SQS_QUEUE_NAME_PREFIX. (SQS_QUEUE_NAMES takes precedence over SQS_QUEUE_NAME_PREFIX) (With no parametera specified via environment variables, the full list of queues will be returned)
+By default, the exporter will watch all SQS queues visible to the AWS account. To watch a specific set of queues, supply one of these parameters:
+* a comma-separated list of queue names in the environment variable `SQS_QUEUE_NAMES`;
+* a single queue prefix in `SQS_QUEUE_NAME_PREFIX`. (SQS_QUEUE_NAMES takes precedence over SQS_QUEUE_NAME_PREFIX);
+* a comma-separated list of queue URLs in `SQS_QUEUE_URLS`.
+
+With no parameters specified via environment variables, the full list of queues will be returned.
 
 ## Docker
 
