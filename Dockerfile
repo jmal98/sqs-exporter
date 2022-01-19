@@ -20,7 +20,8 @@ RUN apk --update add --no-cache --virtual build-dependencies openjdk8 curl \
   && mv /tmp/target/exporter.jar /. \
   && chown exporter:exporter /exporter.jar \
   && rm -rf /tmp/* /root/.m2 \
-  && apk del build-dependencies
+  && apk del build-dependencies \
+  && apk add --no-cache --virtual nss
 
 USER exporter
 
