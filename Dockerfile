@@ -1,4 +1,4 @@
-FROM alpine:3.7
+FROM alpine:3.15.0
 
 RUN apk add --no-cache openjdk8-jre
 
