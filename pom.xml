@@ -57,7 +57,7 @@
 
 				<plugin>
 					<artifactId>maven-compiler-plugin</artifactId>
-					<version>3.7.0</version>
+					<version>3.8.1</version>
 					<configuration>
 						<source>${maven.compiler.source}</source>
 						<target>${maven.compiler.target}</target>
@@ -119,7 +119,7 @@
 							<fail>true</fail>
 							<rules>
 								<requireMavenVersion>
-									<version>[3.0,3.7]</version>
+									<version>[3.0,3.8.1]</version>
 								</requireMavenVersion>
 								<requireJavaVersion>
 									<version>[1.8,)</version>
