@@ -26,6 +26,7 @@ AWS credentials can be provided via the following:
 * Credentials delivered through the Amazon EC2 container service if AWS_CONTAINER_CREDENTIALS_RELATIVE_URI" environment variable is set and security manager has permission to access the variable,
 * Instance profile credentials delivered through the Amazon EC2 metadata service if running within AWS
 * IAM role applied to either an Amazon Elastic Container Service (ECS) service or task
+* Custom SQS Endpoint: You can define the environment variable `SQS_ENDPOINT` to access a compatible SQS Service (i.e. http://localhost:4100)
 
 By default, the exporter will watch all SQS queues visible to the AWS account. To watch a specific set of queues, supply one of these parameters:
 * a comma-separated list of queue names in the environment variable `SQS_QUEUE_NAMES`;

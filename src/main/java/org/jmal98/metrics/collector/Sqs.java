@@ -10,6 +10,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import com.amazonaws.AmazonClientException;
+import com.amazonaws.client.builder.AwsClientBuilder.EndpointConfiguration;
 import com.amazonaws.regions.DefaultAwsRegionProviderChain;
 import com.amazonaws.services.sqs.AmazonSQS;
 import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
@@ -34,14 +35,21 @@ public class Sqs extends Collector {
 		List<MetricFamilySamples> mfs = new ArrayList<MetricFamilySamples>();
 
 		try {
-
 			if (sqs == null) {
 				String region = new DefaultAwsRegionProviderChain().getRegion();
-				sqs = AmazonSQSClientBuilder
-								.standard()
-								.withRegion(region)
-							.build();
-				logger.info("AmazonSQS client is connected to region: ({})", region);
+				String queueEndpoint = System.getenv("SQS_ENDPOINT");
+				if (queueEndpoint != null) {
+					sqs = AmazonSQSClientBuilder
+						.standard()
+						.withEndpointConfiguration(new EndpointConfiguration(queueEndpoint, region))
+					.build();
+				} else {
+					sqs = AmazonSQSClientBuilder
+						.standard()
+						.withRegion(region)
+					.build();
+					logger.info("AmazonSQS client is connected to region: ({})", region);
+				}
 			}
 
 			List<String> queueUrls;
@@ -77,15 +85,17 @@ public class Sqs extends Collector {
 				Map<String, String> qAttributes = attr.getAttributes();
 
 				for (String key : qAttributes.keySet()) {
-					GaugeMetricFamily labeledGauge = new GaugeMetricFamily(
-							String.format("sqs_%s", key.toLowerCase().trim()),
-							attributeDescriptions.get(key),
-							Arrays.asList("queue"));
-					
-					labeledGauge.addMetric(Arrays.asList(queueName),
-							Double.valueOf(qAttributes.get(key)));
-					
-					mfs.add(labeledGauge);
+					if (attributeNames.contains(key)) { // Just in case other attributes were retrieved by getQueueAttributes
+						GaugeMetricFamily labeledGauge = new GaugeMetricFamily(
+								String.format("sqs_%s", key.toLowerCase().trim()),
+								attributeDescriptions.get(key),
+								Arrays.asList("queue"));
+
+						labeledGauge.addMetric(Arrays.asList(queueName),
+						Double.valueOf(qAttributes.get(key)));
+
+						mfs.add(labeledGauge);
+					}
 				}
 			}
 
