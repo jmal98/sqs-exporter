@@ -27,7 +27,7 @@ public class Sqs extends Collector {
 	private AmazonSQS sqs = null;
 
 	private List<String> attributeNames = new ArrayList<String>();
-	
+
 	private Map<String,String> attributeDescriptions = new HashMap<String,String>();
 
 	@Override
@@ -48,8 +48,8 @@ public class Sqs extends Collector {
 						.standard()
 						.withRegion(region)
 					.build();
-					logger.info("AmazonSQS client is connected to region: ({})", region);
 				}
+				logger.info("AmazonSQS client is connected to region: ({})", region);
 			}
 
 			List<String> queueUrls;
@@ -113,10 +113,10 @@ public class Sqs extends Collector {
 		super();
 		attributeNames.add("ApproximateNumberOfMessages");
 		attributeDescriptions.put("ApproximateNumberOfMessages", "The approximate number of visible messages in a queue.");
-		
+
 		attributeNames.add("ApproximateNumberOfMessagesDelayed");
 		attributeDescriptions.put("ApproximateNumberOfMessagesDelayed", "The approximate number of messages that are waiting to be added to the queue.");
-		
+
 		attributeNames.add("ApproximateNumberOfMessagesNotVisible");
 		attributeDescriptions.put("ApproximateNumberOfMessagesNotVisible", "The approximate number of messages that have not timed-out and aren't deleted.");
 	}
